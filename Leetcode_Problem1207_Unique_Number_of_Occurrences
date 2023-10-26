@@ -1,0 +1,81 @@
+int fncmp(const void* a , const void* b)
+{
+    return (*(int*)a - *(int*)b);
+}
+bool uniqueOccurrences(int* arr, int arrSize){
+    qsort(arr,arrSize,sizeof(int),fncmp);
+    int index = 0 , array[2100] = {0} , num = arr[0];
+    for( int i = 0 ; i < arrSize ; i++)
+    {
+        if(arr[i] == num)
+           array[index]++; 
+        else
+        {
+            num = arr[i];
+            array[++index]++;
+        }
+    }
+    qsort(array,index + 1,sizeof(int),fncmp);
+    for( int i = 1 ; i < index + 1 ; i++)
+        if(array[i] == array[i-1])
+            return 0;
+    return 1;
+}
+
+
+------------------------------------------------------------------------------------------------------------
+
+
+int uniqueOccurrences(int* arr, int arrSize) {
+    int occurrenceCount[2001] = {0};  // Updated array size
+    for (int i = 0; i < arrSize; i++) // Count the occurrences of each element in 'arr'
+        occurrenceCount[arr[i] + 1000]++;  // Shift the range to accommodate negative numbers
+    int uniqueCounts[1001] = {0}; // Check if the number of occurrences is unique
+    for (int i = 0; i < 2001; i++) 
+    {
+        if (occurrenceCount[i] != 0) 
+        {
+            int count = occurrenceCount[i];
+            if (uniqueCounts[count] != 0)
+                return 0;  // Duplicate occurrences found
+            uniqueCounts[count] = 1;
+        }
+    }
+    return 1;  // All occurrences are unique
+}
+
+
+---------------------------------------------------------------------------------------------------------------------
+
+
+bool uniqueOccurrences(int* arr, int arrSize){
+    int a[1001] = {0} , c = 0;
+    for(int i = 0 ; i < arrSize ; i++)
+    {
+        for(int j = i + 1 ; j < arrSize ; j++)
+        {
+            if(arr[i] > arr[j])
+            {
+                int t=arr[i];
+                arr[i]=arr[j];
+                arr[j]=t;
+            }
+        }
+    }
+    for(int i = 0 ; i < arrSize - 1 ; i++)
+    {
+        if(arr[i] == arr[i+1])
+            c++;
+        else
+        {
+            if(a[c] == 1)
+                return 0;
+            a[c] = 1;
+            c = 0;
+        }
+    }
+    if(arr[arrSize-2] != arr[arrSize-1])
+        if(a[c] == 1)
+            return 0;
+    return 1;
+}
